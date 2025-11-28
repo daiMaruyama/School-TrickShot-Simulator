@@ -7,7 +7,7 @@ public class BallController : MonoBehaviour
     [Header("Settings")]
     [SerializeField] float maxPower = 10f;
     [SerializeField] float chargeSpeed = 10f;
-    
+
     struct ReplayFrame
     {
         public Vector3 position;
@@ -17,13 +17,13 @@ public class BallController : MonoBehaviour
     Rigidbody _rb;
     List<ReplayFrame> _replayData = new List<ReplayFrame>();
 
-
     InputAction _fireAction;
-    InputAction _replayAction;
+    InputAction _retryAction;
 
     bool _isCharging = false;
     float _currentPower = 0f;
     bool _isRecording = false;
+
     bool _isReplaying = false;
     int _replayIndex = 0;
 
@@ -35,19 +35,19 @@ public class BallController : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
 
         _fireAction = new InputAction(binding: "<Keyboard>/space");
-        _replayAction = new InputAction(binding: "<Keyboard>/r");
+        _retryAction = new InputAction(binding: "<Keyboard>/r");
     }
 
     void OnEnable()
     {
         _fireAction.Enable();
-        _replayAction.Enable();
+        _retryAction.Enable();
     }
 
     void OnDisable()
     {
         _fireAction.Disable();
-        _replayAction.Disable();
+        _retryAction.Disable();
     }
 
     void Start()
@@ -75,9 +75,9 @@ public class BallController : MonoBehaviour
             }
         }
 
-        if (_replayAction.WasPressedThisFrame() && !_isReplaying)
+        if (_retryAction.WasPressedThisFrame())
         {
-            StartReplay();
+            ResetBall();
         }
     }
 
@@ -91,7 +91,6 @@ public class BallController : MonoBehaviour
                 rotation = transform.rotation
             });
         }
-
         else if (_isReplaying)
         {
             if (_replayIndex < _replayData.Count)
@@ -100,11 +99,6 @@ public class BallController : MonoBehaviour
                 _rb.MoveRotation(_replayData[_replayIndex].rotation);
                 _replayIndex++;
             }
-            else
-            {
-                Debug.Log("Replay Finished");
-                _isReplaying = false;
-            }
         }
     }
 
@@ -112,25 +106,34 @@ public class BallController : MonoBehaviour
     {
         _isCharging = false;
         _isRecording = true;
-        _rb.isKinematic = false;
 
+        _replayData.Clear();
+
+        _rb.isKinematic = false;
         Vector3 forceDir = (transform.forward + transform.up).normalized;
         _rb.AddForce(forceDir * _currentPower, ForceMode.Impulse);
     }
 
-    public void StartReplay()
+    public void ResetBall()
     {
+        // 1. 位置と回転を初期状態に戻す
         transform.position = _startPos;
         transform.rotation = _startRot;
+
+        // 2. 物理挙動を完全に止める
         _rb.linearVelocity = Vector3.zero;
         _rb.angularVelocity = Vector3.zero;
-
-        _isRecording = false;
-        _isReplaying = true;
         _rb.isKinematic = true;
 
-        _replayIndex = 0;
+        // 3. フラグとパワーをリセット
+        _isCharging = false;
+        _isRecording = false;
+        _isReplaying = false;
+        _currentPower = 0f;
 
-        Debug.Log("Start Replay...");
+        // 4. データも一旦クリア（今のテイクは失敗扱いなので
+        _replayData.Clear();
+
+        Debug.Log("Reset! Try Again.");
     }
 }
