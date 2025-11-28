@@ -31,9 +31,16 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log($"<color=cyan>Stage {CurrentStageIndex + 1} Cleared! Data Saved.</color>");
 
-        // データを保存
-        AllStageReplays.Add(winningData);
+        // リストの枠が足りない場合（初めてクリアした時など）は枠を作る
+        while (AllStageReplays.Count <= CurrentStageIndex)
+        {
+            AllStageReplays.Add(null);
+        }
 
-        // 次の動き（例: 2秒後に次のステージへ、など）
+        // 指定したステージ番号の場所に、データを「上書き」する
+        AllStageReplays[CurrentStageIndex] = winningData;
+
+        // 確認用ログ：今何ステージ分のデータを持ってるか
+        Debug.Log($"Total Saved Stages: {AllStageReplays.Count}");
     }
 }

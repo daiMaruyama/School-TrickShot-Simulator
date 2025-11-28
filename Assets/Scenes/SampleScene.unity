@@ -822,8 +822,8 @@ GameObject:
   - component: {fileID: 614969139}
   - component: {fileID: 614969138}
   - component: {fileID: 614969137}
-  - component: {fileID: 614969136}
   - component: {fileID: 614969140}
+  - component: {fileID: 614969136}
   m_Layer: 0
   m_Name: (G)Quad
   m_TagString: Untagged
@@ -1494,6 +1494,7 @@ GameObject:
   - component: {fileID: 1287077165}
   - component: {fileID: 1287077169}
   - component: {fileID: 1287077170}
+  - component: {fileID: 1287077171}
   m_Layer: 0
   m_Name: (G)Ball
   m_TagString: Player
@@ -1631,6 +1632,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxPower: 10
   chargeSpeed: 10
+--- !u!114 &1287077171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1287077164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a043c676be2820468db72d62438871d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _replayData: []
 --- !u!1 &2059336011
 GameObject:
   m_ObjectHideFlags: 0
