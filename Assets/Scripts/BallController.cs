@@ -2,17 +2,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[System.Serializable]
+public struct ReplayFrame
+{
+    public Vector3 position;
+    public Quaternion rotation;
+}
+
 public class BallController : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] float maxPower = 10f;
     [SerializeField] float chargeSpeed = 10f;
-
-    struct ReplayFrame
-    {
-        public Vector3 position;
-        public Quaternion rotation;
-    }
 
     Rigidbody _rb;
     List<ReplayFrame> _replayData = new List<ReplayFrame>();
@@ -135,5 +136,15 @@ public class BallController : MonoBehaviour
         _replayData.Clear();
 
         Debug.Log("Reset! Try Again.");
+    }
+
+    /// <summary>
+    /// ゴールした時に、外部（GoalDetectorなど）がデータを取得するために使います
+    /// </summary>
+    public List<ReplayFrame> GetReplayData()
+    {
+        // 参照渡し（中身が繋がった状態）で渡すと後で消去された時に困るので、
+        // 「新しいリスト」としてコピーして渡します
+        return new List<ReplayFrame>(_replayData);
     }
 }
