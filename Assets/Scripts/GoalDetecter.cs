@@ -5,6 +5,7 @@ public class GoalDetector : MonoBehaviour
 {
     // ƒS[ƒ‹‚µ‚Ä‚©‚ç˜^‰æ‚ğ~‚ß‚é‚Ü‚Å‚Ìu—]‰Cv‚ÌŠÔi•bj
     [SerializeField] float waitTimeAfterGoal = 1.5f;
+    [SerializeField] UIManager uiManager;
 
     // “ñd”»’è–h~—pƒtƒ‰ƒO
     bool _isCleared = false;
@@ -29,6 +30,11 @@ public class GoalDetector : MonoBehaviour
     IEnumerator ClearSequence(ObjectRecorder recorder)
     {
         _isCleared = true; // ˜A‘±ƒS[ƒ‹–h~
+
+        if (uiManager != null)
+        {
+            uiManager.ShowClearEffect();
+        }
 
         Debug.Log("<color=yellow>GOAL!! (Saving in " + waitTimeAfterGoal + "s...)</color>");
 
